@@ -1,6 +1,7 @@
 package com.khs.api.stats.filter;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.Filter;
@@ -19,11 +20,11 @@ public class ApiFilter implements Filter {
 	private ApiPublishThread thread = null;
 	private String apiPattern = "/sherpa/.*";
 	private String serviceName = null;
-	private long threshold = 10; // publish every 10 api calls
 	private String apiServer = null;
 	private boolean valid = false;
 	private String token = null;
 	private long referenceId = -1;
+	private long watchThreshold = 10;
 	
 	@Override
 	public void destroy() {
@@ -34,10 +35,6 @@ public class ApiFilter implements Filter {
 			throws IOException, ServletException {
 	
 		final HttpServletRequest request = (HttpServletRequest) servletRequest;
- 
-		//check for Auth tokens...
-		String userid = request.getHeader("userid");
-		String token = request.getHeader("token");
 		
 		String method = request.getMethod();
 		String uri = request.getRequestURI();
@@ -47,12 +44,12 @@ public class ApiFilter implements Filter {
 	       thread = new ApiPublishThread(); 	
 	       thread.setServiceName(this.serviceName);
 	       thread.setServer(this.apiServer);
-	       thread.setThreshold(this.threshold);
 	       thread.setReferenceId(this.referenceId);
+	       thread.setThreshold(this.watchThreshold);
 		   Thread t = new Thread(thread);
 		   t.setDaemon(true);	
 		   t.start();		
-		   LOG.info("API Watch Thread Started, will publish API's for every "+this.threshold+" encounters... ");
+		   LOG.info("API Watch Thread Started, will publish API's for every "+this.watchThreshold+" encounters... ");
 	    }
 	
 		
@@ -69,24 +66,39 @@ public class ApiFilter implements Filter {
 	@Override
 	public void init(FilterConfig config) throws ServletException {
 	
-	    this.apiPattern = config.getInitParameter("pattern");
-	    this.serviceName = config.getInitParameter("service");
-	    this.apiServer = config.getInitParameter("server");
-	    String refid = config.getInitParameter("reference");
+	    this.apiPattern = config.getInitParameter("api-pattern");
+	    this.serviceName = config.getInitParameter("service-name");
+	    this.apiServer = config.getInitParameter("grokola-server");
+	    this.token = config.getInitParameter("token");
+	    String threshold = config.getInitParameter("watch-threshold");
+	    String refid = config.getInitParameter("reference-id");
+	    
+	    if (threshold != null) {
+	    	try {
+	    	 this.watchThreshold = new Long(threshold);
+	    	} catch(NumberFormatException e) {
+	    		LOG.log(Level.WARNING,"watch-threshold must be an integer" );   		
+	    	}
+	    }
+	    
+	    
+	    if (token == null) {
+	    	LOG.log(Level.SEVERE,"Integration Token required for API filter to be enabled...");	    	
+	    }
 	    
 	    if (refid == null) {
-	    	LOG.info("GrokOla Reference Id must be defined...");
+	    	LOG.log(Level.SEVERE,"GrokOla Reference Id must be defined...");
 	    } else {
 	       this.referenceId = new Long(refid);
 	    }
 	    
 	    if (this.apiServer == null) {
-	       LOG.info("server must be specified in ApiFilter config...Api's will not be watched");	
+	       LOG.log(Level.SEVERE,"server must be specified in ApiFilter config...Api's will not be watched");	
 	    }
 	    
 	    // mark true is api watch filter has a valid configuration
 	    
-	    this.valid = this.apiServer != null && this.referenceId >= 0; 
+	    this.valid = this.apiServer != null && this.referenceId >= 0 && this.token != null; 
 	   
 	
 	}

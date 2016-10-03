@@ -22,8 +22,17 @@ public class ApiPublishThread implements Runnable {
 	private String server;
 	private long referenceId = 0;
 	private String uri = "sherpa/api/stats";
+	private String token = null;
 	
 	
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public long getReferenceId() {
 		return referenceId;
 	}
@@ -96,6 +105,8 @@ public class ApiPublishThread implements Runnable {
 					Integer.toString(postDataLength));
 			conn.setUseCaches(false);
 
+			conn.setRequestProperty("token",this.token);
+			
 			DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
 			wr.write(postData);
 			wr.flush();
