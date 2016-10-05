@@ -50,14 +50,17 @@ public class ApiFilter implements Filter {
 		   t.setDaemon(true);	
 		   t.start();		
 		   LOG.info("API Watch Thread Started, will publish API's for every "+this.watchThreshold+" encounters... ");
-	    }
-	
+	    }	
 		
-	    if (uri.matches(apiPattern) && this.valid) {
-	       thread.add(uri, method);
-	    }
+	     long start = System.currentTimeMillis();
 		
-		filterChain.doFilter(servletRequest, servletResponse);
+		 filterChain.doFilter(servletRequest, servletResponse);
+		
+		 if (uri.matches(apiPattern) && this.valid) {
+		       thread.add(uri, method, System.currentTimeMillis() - start);
+		  }
+		
+		
 		
 	
 		

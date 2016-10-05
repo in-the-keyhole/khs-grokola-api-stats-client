@@ -75,8 +75,8 @@ public class ApiPublishThread implements Runnable {
 		this.serviceName = serviceName;
 	}
 
-	public void add(String api, String method) {
-		apis.add(new String[] { api, method });
+	public void add(String api, String method, long milliseconds) {
+		apis.add(new String[] { api, method, ""+milliseconds });
 	}
 
 	public void emit() {
@@ -156,7 +156,7 @@ public class ApiPublishThread implements Runnable {
 		while (size > 0) {
 		 if (!apis.isEmpty()) {
 			String[] v = apis.pop();
-			json.append("{uri:\"" +v[0] + "\", method: \"" +v[1]+"\", service: \"" + this.serviceName() +"\"}");
+			json.append("{uri:\"" +v[0] + "\", method: \"" +v[1]+"\", duration: \"" + v[2]+"\", service: \"" + this.serviceName() +"\"}");
 			size = apis.size();
 			if (size > 0) {json.append(",");}
 		 }
