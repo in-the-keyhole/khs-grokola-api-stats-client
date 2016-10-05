@@ -9,7 +9,7 @@ Add the following dependency to your POM.xml
 	<dependency>
 	 <groupId>com.keyholesoftware</groupId>
 	 <artifactId>khs-grokola-api-stats-client</artifactId>
-	 <version>0.0.1-SNAPSHOT</version>
+	 <version>0.0.2-SNAPSHOT</version>
 	</dependency>
 	
 Configure the Api Stats Filter through `web.xml' or a Spring Java Config
