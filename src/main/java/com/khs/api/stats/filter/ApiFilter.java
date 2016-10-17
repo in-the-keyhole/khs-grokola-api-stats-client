@@ -25,6 +25,7 @@ public class ApiFilter implements Filter {
 	private String token = null;
 	private long referenceId = -1;
 	private long watchThreshold = 10;
+	private long sleep = 10000;
 	
 	@Override
 	public void destroy() {
@@ -46,6 +47,7 @@ public class ApiFilter implements Filter {
 	       thread.setServer(this.apiServer);
 	       thread.setReferenceId(this.referenceId);
 	       thread.setThreshold(this.watchThreshold);
+	       thread.setSleep(this.sleep);
 		   Thread t = new Thread(thread);
 		   t.setDaemon(true);	
 		   t.start();		
@@ -73,6 +75,7 @@ public class ApiFilter implements Filter {
 	    this.serviceName = config.getInitParameter("service-name");
 	    this.apiServer = config.getInitParameter("grokola-server");
 	    this.token = config.getInitParameter("token");
+	    String slp = config.getInitParameter("sleep");
 	    String threshold = config.getInitParameter("watch-threshold");
 	    String refid = config.getInitParameter("reference-id");
 	    
@@ -84,6 +87,17 @@ public class ApiFilter implements Filter {
 	    	}
 	    }
 	    
+	    if (slp != null) {
+	    	
+	    	try {
+	    		
+	    		this.sleep = new Long(slp);
+	    		
+	    	} catch (NumberFormatException e) {
+	    		LOG.log(Level.WARNING,"Sleep must be an number...");
+	    	}
+	    	
+	    }
 	    
 	    if (token == null) {
 	    	LOG.log(Level.SEVERE,"Integration Token required for API filter to be enabled...");	    	

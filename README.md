@@ -81,4 +81,4 @@ Api Stats watch configuration options are described below.
 
 `watch-threshold` - <OPTIONAL>, number of api calls before being published to GrokOla server. Default is 50. 
 
-
+`sleep` - <OPTIONAL>, amount of time in milliseconds the filter will sleep before emitting API stats to server. Default is 10 seconds.

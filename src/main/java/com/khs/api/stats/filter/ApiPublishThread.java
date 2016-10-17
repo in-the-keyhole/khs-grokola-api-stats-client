@@ -23,8 +23,16 @@ public class ApiPublishThread implements Runnable {
 	private long referenceId = 0;
 	private String uri = "sherpa/api/stats";
 	private String token = null;
-	
-	
+	private long sleep = 10000;
+		
+	public long getSleep() {
+		return sleep;
+	}
+
+	public void setSleep(long sleep) {
+		this.sleep = sleep;
+	}
+
 	public String getToken() {
 		return token;
 	}
@@ -117,7 +125,7 @@ public class ApiPublishThread implements Runnable {
 			int i = 0;
 			while ((i = input.read()) >= 0 ) {
 				
-				System.out.print((char) i);
+				LOG.info(""+(char) i);
 			}
 			
 			
@@ -178,7 +186,7 @@ public class ApiPublishThread implements Runnable {
 			}
 					
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
