@@ -33,7 +33,7 @@ Configure the Api Stats Filter through `web.xml` or a Spring Java Config
 	
 	...
 	
-Note, there is also a Spring Boot Starter for api stats click (here)[https://github.com/in-the-keyhole/khs-spring-boot-api-statistics-starter] to visit.	
+Note, there is also a Spring Boot Starter for api stats click [here](https://github.com/in-the-keyhole/khs-spring-boot-api-statistics-starter) to visit.	
 	
 
 #### Web.xml
