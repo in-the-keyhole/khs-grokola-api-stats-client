@@ -14,7 +14,7 @@ Add the following dependency to your POM.xml
 	
 Configure the Api Stats Filter through `web.xml' or a Spring Java Config
 
-####Spring Java Config 
+#### Spring Java Config 
 
 	...
 	public FilterRegistrationBean someFilterRegistration() {
@@ -33,7 +33,7 @@ Configure the Api Stats Filter through `web.xml' or a Spring Java Config
 	
 	...
 
-####Web.xml
+#### Web.xml
 
 
 	<filter> 
