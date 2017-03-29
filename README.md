@@ -12,7 +12,7 @@ Add the following dependency to your POM.xml
 	 <version>0.0.3-SNAPSHOT</version>
 	</dependency>
 	
-Configure the Api Stats Filter through `web.xml' or a Spring Java Config
+Configure the Api Stats Filter through `web.xml` or a Spring Java Config
 
 #### Spring Java Config 
 
